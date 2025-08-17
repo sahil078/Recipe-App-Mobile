@@ -2,8 +2,6 @@
 
 A beautiful and feature-rich mobile recipe application built with React Native and Expo, featuring modern UI/UX design, recipe management, and user authentication.
 
-![Recipe App Banner](assets/images/icon.png)
-
 ## ✨ Features
 
 - 🔐 **Secure Authentication** - Built with Clerk for seamless user management
