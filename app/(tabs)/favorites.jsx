@@ -10,11 +10,11 @@ import LoadingSpinner from '../../components/LoadingSpinner'
 import RecipeCard from '../../components/RecipeCard'
 
 const FavoritesScreen = () => {
-  const {signOut} =  useClerk();
-  const {user} = useUser();
+  const { signOut } = useClerk();
+  const { user } = useUser();
 
-  const[favoriteRecipes, setFavoriteRecipes] = useState([]);
-  const [loading , setLoading] = useState(true);
+  const [favoriteRecipes, setFavoriteRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadFavorites = async () => {
@@ -52,47 +52,64 @@ const FavoritesScreen = () => {
     }
   }, [user?.id]);
 
-  const handleSignOut = () => {
-    Alert.alert("Logout", "Are you sure you want to logout?", [
-      { text: "Cancel", style: "cancel" },
-      { text: "Logout", style: "destructive", onPress: signOut },
-    ]);
+  const handleSignOut = async () => {
+    try {
+      Alert.alert("Logout", "Are you sure you want to logout?", [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Logout",
+          style: "destructive",
+          onPress: () => {
+            // Call the signOut function outside the Alert
+            performSignOut();
+          },
+        },
+      ]);
+    } catch (error) {
+      console.error("Error in handleSignOut:", error);
+    }
   };
 
-  if(loading) return <LoadingSpinner message='Loading your favorites ...'/>
+  const performSignOut = async () => {
+    try {
+      await signOut(); // Ensure signOut is awaited
+      console.log("User signed out successfully");
+    } catch (error) {
+      console.error("Error during sign out:", error);
+      Alert.alert("Error", "Failed to sign out. Please try again.");
+    }
+  };
+
+  if (loading) return <LoadingSpinner message="Loading your favorites ..." />;
 
   return (
     <View style={favoritesStyles.container}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-        >
-          <View
-            style={favoritesStyles.header}
-          > 
-            <Text style={favoritesStyles.title}>Favorites</Text>
-            <TouchableOpacity 
-              style={favoritesStyles.logoutButton}
-              onPress={handleSignOut}
-            >
-              <Ionicons name='log-out-outline' size={22} color={COLORS.text}/>
-            </TouchableOpacity>
-          </View>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={favoritesStyles.header}>
+          <Text style={favoritesStyles.title}>Favorites</Text>
+          <TouchableOpacity
+            style={favoritesStyles.logoutButton}
+            onPress={handleSignOut}
+          >
+            <Ionicons name="log-out-outline" size={22} color={COLORS.text} />
+          </TouchableOpacity>
+        </View>
 
-          <View style={favoritesStyles.recipesSection}>
-            <FlatList 
-              data={favoriteRecipes}
-              renderItem={({ item }) => <RecipeCard recipe={item} />}
-              keyExtractor={(item) => item.id.toString()}
-              numColumns={2}
-              columnWrapperStyle={favoritesStyles.row}
-              contentContainerStyle={favoritesStyles.recipesGrid}
-              scrollEnabled={false}
-              ListEmptyComponent={<NoFavoritesFound />}
-            />
-          </View>
-        </ScrollView>
+        <View style={favoritesStyles.recipesSection}>
+          <FlatList
+            data={favoriteRecipes}
+            renderItem={({ item }) => <RecipeCard recipe={item} />}
+            keyExtractor={(item) => item.id.toString()}
+            numColumns={2}
+            columnWrapperStyle={favoritesStyles.row}
+            contentContainerStyle={favoritesStyles.recipesGrid}
+            scrollEnabled={false}
+            ListEmptyComponent={<NoFavoritesFound />}
+          />
+        </View>
+      </ScrollView>
     </View>
-  )
-}
+  );
+};
 
 export default FavoritesScreen;

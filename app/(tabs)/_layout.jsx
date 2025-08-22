@@ -35,7 +35,7 @@ const TabsLayout = () => {
       name='index'
       options={{
         title: "Recipes",
-        tabBarIcon: ({color, size}) =>  <Ionicons name='restaurent' size={size} color={color}/>,
+        tabBarIcon: ({color, size}) =>  <Ionicons name='restaurant' size={size} color={color}/>,
       }}
     />
 

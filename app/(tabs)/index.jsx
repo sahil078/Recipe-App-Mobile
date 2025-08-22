@@ -200,7 +200,7 @@ const HomeScreen = () => {
             />
           ) : (
             <View style={homeStyles.emptyState}>
-              <Ionicons name="restaurant-outline" size={64} color={COLORS.textLight} />
+              <Ionicons name="restaurant" size={22} color={COLORS.text} />
               <Text style={homeStyles.emptyTitle}>No recipes found</Text>
               <Text style={homeStyles.emptyDescription}>Try a different category</Text>
             </View>
